@@ -4,6 +4,7 @@ config/
 # SQlite
 *.sqlite3
 *.sqlite
+*.db
 
 #### windows ####
 # Windows thumbnail cache files
