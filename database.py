@@ -55,9 +55,11 @@ def get_client(unique_code, unique_identifier, connection) -> bool:
 
 
 @ensure_connection
-def add_new_client_to_db(unique_identifier, connection):
+def add_new_client_to_db(unique_identifier, unique_code, connection):
     '''
     The method adds a new client to the database
+    :param connection:
+    :param unique_code:
     :param unique_identifier: unique client ID
     :return:unique_code -
     '''
@@ -65,7 +67,7 @@ def add_new_client_to_db(unique_identifier, connection):
     result = cursor.execute("""
         INSERT INTO clients
         (unique_identifier, unique_code)
-        VALUES (?, random());""", (unique_identifier,))
+        VALUES (?, ?);""", (unique_identifier, unique_code))
     connection.commit()
 
 

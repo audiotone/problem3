@@ -7,6 +7,7 @@ import random
 
 from test import test_get_unique_code
 from database import init_db, get_client, add_new_client_to_db, add_new_message
+from generate_unique_code import generate_unique_code
 
 #Get an instance of a logger
 logger = getLogger(__name__)
@@ -20,7 +21,9 @@ def add_new_client():
     '''
     r = request.get_json()
     unique_identifier = r['unique_identifier']
-    add_new_client_to_db(unique_identifier)
+    unique_code = generate_unique_code()
+    print(type(unique_code))
+    add_new_client_to_db(unique_identifier, unique_code)
     return '200'
 
 
