@@ -17,23 +17,27 @@ def init_db(connection):
     connection.commit()
 
     cursor.execute("""
-        CREATE TABLE IF NOT EXISTS messages(
-        id INTEGER PRIMARY KEY,
-        message TEXT
-        );
+    CREATE TABLE IF NOT EXISTS messages(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        message TEXT,
+        client_id INTEGER NOT NULL,
+        FOREIGN KEY (client_id) REFERENCES clients(id)
+        )
         """)
     connection.commit()
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS clients(
-        id INTEGER PRIMARY KEY,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         unique_identifier TEXT NOT NULL,
-        unique_code TEXT NOT NULL,
-        messages_id INTEGER,
-        FOREIGN KEY (messages_id) REFERENCES messages(id)
+        unique_code TEXT NOT NULL
         );
         """)
     connection.commit()
+
+
+
+
 
 @ensure_connection
 def get_client(unique_code, unique_identifier, connection) -> bool:
@@ -60,7 +64,7 @@ def add_new_client_to_db(unique_identifier, connection):
     cursor = connection.cursor()
     result = cursor.execute("""
         INSERT INTO clients
-        (unique_identifier, unique_code,)
+        (unique_identifier, unique_code)
         VALUES (?, random());""", (unique_identifier,))
     connection.commit()
 
