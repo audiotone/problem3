@@ -7,7 +7,7 @@ import random
 
 from test import test_get_unique_code
 from database import init_db, get_client, add_new_client_to_db, add_new_message
-from generate_unique_code import generate_unique_code
+from service import generate_unique_code, unique_identifier_type_check
 
 #Get an instance of a logger
 logger = getLogger(__name__)
@@ -22,13 +22,15 @@ def add_new_client():
 
     try:
         data = json.loads(request.data)
-    except ValueError as e:
+    except ValueError:
         return {"status": "error", "message": "no json sent"}
+    unique_identifier = data['unique_identifier']
+    if unique_identifier_type_check(unique_identifier):
+        unique_code = generate_unique_code()
+        add_new_client_to_db(unique_identifier, unique_code)
+        return {"unique_code": unique_code}
     else:
-        unique_identifier = data['unique_identifier']
-    unique_code = generate_unique_code()
-    add_new_client_to_db(unique_identifier, unique_code)
-    return {"unique_code": unique_code}
+        return {"status": "error", "message": "no string format"}
 
 
 @app.route('/message', methods=['POST'])
