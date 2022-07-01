@@ -22,9 +22,11 @@ def add_new_client():
 
     try:
         data = json.loads(request.data)
+        unique_identifier = data['unique_identifier']
     except ValueError:
         return {"status": "error", "message": "no json sent"}
-    unique_identifier = data['unique_identifier']
+    except KeyError:
+        return {"status": "error", "message": "key is not correct"}
     if unique_identifier_type_check(unique_identifier):
         unique_code = generate_unique_code()
         add_new_client_to_db(unique_identifier, unique_code)
