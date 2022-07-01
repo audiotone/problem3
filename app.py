@@ -19,12 +19,16 @@ def add_new_client():
     '''
     the function accepts a request to create a new client with unique code
     '''
-    r = request.get_json()
-    unique_identifier = r['unique_identifier']
+
+    try:
+        data = json.loads(request.data)
+    except ValueError as e:
+        return {"status": "error", "message": "no json sent"}
+    else:
+        unique_identifier = data['unique_identifier']
     unique_code = generate_unique_code()
-    print(type(unique_code))
     add_new_client_to_db(unique_identifier, unique_code)
-    return '200'
+    return {"unique_code": unique_code}
 
 
 @app.route('/message', methods=['POST'])
