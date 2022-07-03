@@ -47,11 +47,16 @@ def get_client(unique_code, unique_identifier, connection) -> bool:
     :return: true if client exist or false if don't exist
     '''
     cursor = connection.cursor()
-    cursor.execute('''
-        SELECT from clients id
-        WHERE (unique_code==unique_code, unique_identifier==unique_identifier)
-        ''')
+    unicode_code_query = cursor.execute('''
+        SELECT unique_code from clients
+        WHERE unique_identifier = ?
+        ''', (unique_identifier,))
     connection.commit()
+    record = cursor.fetchone()
+    print(record[0])
+    if record[0] == unique_code:
+        return True
+    return False
 
 
 @ensure_connection

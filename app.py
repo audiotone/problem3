@@ -1,16 +1,16 @@
 from flask import Flask
 from flask import request
-from logging import getLogger
+import logging
 import json
-import pprint
-import random
+
 
 from test import test_get_unique_code
 from database import init_db, get_client, add_new_client_to_db, add_new_message
 from service import generate_unique_code, unique_identifier_type_check
 
-#Get an instance of a logger
-logger = getLogger(__name__)
+#Settings for logging
+logging.basicConfig(filename='messages.log', encoding='utf-8', filemode='w', level=logging.WARNING)
+
 
 app = Flask(__name__)
 
@@ -36,13 +36,18 @@ def add_new_client():
 
 
 @app.route('/message', methods=['POST'])
-def provide_text_message(message, unique_code, unique_identifier):
+def provide_text_message():
+    data = json.loads(request.data)
+    unique_identifier = data['unique_identifier']
+    unique_code = data['unique_code']
+    unique_identifier = data['unique_identifier']
+    message = data['message']
     if get_client(unique_code, unique_identifier):
-        add_new_message(unique_identifier, unique_code, message)
-        logger.info(f'{message}')
-        return "ok"
+        #add_new_message(unique_identifier, unique_code, message)
+        logging.warning(f'Client {unique_identifier} added new message: {message}')
+        return {"status": "ok"}
     else:
-        return "An error has occurred"
+        return {"status": "error", "message": "client code does not match client identifier"}
 
 
 def main():
@@ -50,7 +55,6 @@ def main():
     #test_get_unique_code(add_new_client)
     #Connect to database
     init_db()
-    logger.info('Database create')
 
 
 if __name__ == '__main__':
