@@ -2,7 +2,7 @@ import sqlite3
 
 def ensure_connection(function):
     def inner(*args, **kwargs):
-        with sqlite3.connect('clients.db') as connection:
+        with sqlite3.connect('.\sqlite\clients.db') as connection:
             result = function(*args, connection=connection, **kwargs)
         return result
     return inner

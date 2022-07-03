@@ -9,7 +9,7 @@ from database import init_db, get_client, add_new_client_to_db, add_new_message
 from service import generate_unique_code, unique_identifier_type_check
 
 #Settings for logging
-logging.basicConfig(filename='messages.log', encoding='utf-8', filemode='w', level=logging.WARNING)
+logging.basicConfig(filename='messages.log', encoding='utf-8', level=logging.INFO)
 
 
 app = Flask(__name__)
@@ -44,7 +44,7 @@ def provide_text_message():
     message = data['message']
     if get_client(unique_code, unique_identifier):
         #add_new_message(unique_identifier, unique_code, message)
-        logging.warning(f'Client {unique_identifier} added new message: {message}')
+        logging.info(f'Client {unique_identifier} added new message: {message}')
         return {"status": "ok"}
     else:
         return {"status": "error", "message": "client code does not match client identifier"}
