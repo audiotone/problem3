@@ -53,9 +53,9 @@ def get_client(unique_code, unique_identifier, connection) -> bool:
         ''', (unique_identifier,))
     connection.commit()
     record = cursor.fetchone()
-    print(record[0])
-    if record[0] == unique_code:
-        return True
+    if record:
+        if record[0] == unique_code:
+            return True
     return False
 
 
