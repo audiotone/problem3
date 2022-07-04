@@ -9,7 +9,7 @@ from database import init_db, get_client, add_new_client_to_db, add_new_message
 from service import generate_unique_code, unique_identifier_type_check
 
 #Settings for logging
-logging.basicConfig(filename='messages.log', encoding='utf-8', level=logging.INFO)
+logging.basicConfig(filename='./sqlite/messages.log', encoding='utf-8', level=logging.INFO)
 
 
 app = Flask(__name__)
