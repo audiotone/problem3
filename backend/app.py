@@ -5,11 +5,11 @@ import json
 
 
 from test import test_get_unique_code
-from database import init_db, get_client, add_new_client_to_db, add_new_message
+from database import init_db, get_client, add_new_client_to_db
 from service import generate_unique_code, unique_identifier_type_check
 
 #Settings for logging
-logging.basicConfig(filename='./sqlite/messages.log', encoding='utf-8', level=logging.INFO)
+logging.basicConfig(filename='./log/messages.log', encoding='utf-8', level=logging.INFO)
 
 
 app = Flask(__name__)
@@ -43,7 +43,6 @@ def provide_text_message():
     unique_identifier = data['unique_identifier']
     message = data['message']
     if get_client(unique_code, unique_identifier):
-        #add_new_message(unique_identifier, unique_code, message)
         logging.info(f'Client {unique_identifier} added new message: {message}')
         return {"status": "ok"}
     else:
