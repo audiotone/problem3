@@ -1,4 +1,8 @@
-version: "1"
+version: "3.9"
+
+volumes:
+  sqlite_volume:
+  log_volume:
 
 services:
   backend:
@@ -6,13 +10,9 @@ services:
     container_name: backend
     restart: always
     volumes:
-      - ./backend/sqlite:/usr/src/app/backend/sqlite
-      - ./backend/log:/usr/src/app/backend/log
+      - sqlite_volume:/usr/src/app/backend/sqlite
+      - log_volume:/usr/src/app/backend/log
     ports:
       - 8000:8000
       - 8001:8001
 
-
-volumes:
-  sqlite_volume: {}
-  log_volume: {}

@@ -9,7 +9,7 @@ from database import init_db, get_client, add_new_client_to_db
 from service import generate_unique_code, unique_identifier_type_check
 
 #Settings for logging
-logging.basicConfig(filename='./log/messages.log', encoding='utf-8', level=logging.INFO)
+logging.basicConfig(filename='./backend/log/messages.log', encoding='utf-8', level=logging.INFO)
 
 
 app = Flask(__name__)
