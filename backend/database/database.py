@@ -3,7 +3,7 @@ import sqlite3
 
 def ensure_connection(function):
     def inner(*args, **kwargs):
-        with sqlite3.connect('./backend/sqlite/clients.db') as connection:
+        with sqlite3.connect('./sqlite/clients.db') as connection:
             result = function(*args, connection=connection, **kwargs)
         return result
 
@@ -77,7 +77,7 @@ def add_new_client_to_db(unique_identifier, unique_code, connection):
 
 def add_new_message(unique_identifier, unique_code, message, connection) -> bool:
     '''
-    The method writes the provided text message to a log file if client code is correct
+    The method writes the provided text message to a var file if client code is correct
     :param unique_identifier:
     :param unique_code:
     :param message:
