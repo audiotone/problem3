@@ -20,7 +20,7 @@ def add_new_client():
         return {"status": "error", "message": "no json sent"}
     except KeyError:
         return {"status": "error", "message": "key is not correct"}
-    if check_unique_identifier(unique_identifier):
+    if check_unique_identifier_type(unique_identifier):
         unique_code = generate_unique_code()
         add_new_client_to_db(unique_identifier, unique_code)
         return {"unique_code": unique_code}
