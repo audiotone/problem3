@@ -21,7 +21,7 @@ services:
     build: ./backend
     container_name: backend
     restart: always
-    command: gunicorn --bind 0.0.0.0:8000 --workers 4 "main:create_flask_app()"
+    command: gunicorn --bind 0.0.0.0:8000 --workers 50 "main:create_flask_app()"
     volumes:
       - sqlite_volume:/usr/src/app/sqlite
       - log_volume:/usr/src/app/var
