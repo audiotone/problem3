@@ -1,11 +1,14 @@
 import json
-import logging
+import logging.config
 from flask import Blueprint, request
 
 from database.database import get_client
 
 # Settings for logging
-logging.basicConfig(filename='./var/log/messages.var', encoding='utf-8', level=logging.INFO)
+#logging.basicConfig(filename='./var/log/messages.log', encoding='utf-8', level=logging.INFO)
+logging.config.fileConfig("./logging.ini", disable_existing_loggers=False)
+# Get an instance of a specific named logger
+logger = logging.getLogger("message")
 
 provide_text_message_bp = Blueprint('provide_text_message', __name__)
 
@@ -18,7 +21,7 @@ def provide_text_message():
     unique_identifier = data['unique_identifier']
     message = data['message']
     if get_client(unique_code, unique_identifier):
-        logging.info(f'Client {unique_identifier} added new message: {message}')
+        logger.info(f'Client {unique_identifier} added new message: {message}')
         return {"status": "ok"}
     else:
         return {"status": "error", "message": "client code does not match client identifier"}

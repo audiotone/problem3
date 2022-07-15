@@ -1,4 +1,11 @@
 import sqlite3
+import logging.config
+
+# Settings for logging
+#FORMAT = '%(asctime)s %(name)s %(levelname)s:%(message)s'
+#logging.basicConfig(filename='./var/log/sqlite.log', encoding='utf-8', level=logging.DEBUG, format=FORMAT)
+logging.config.fileConfig("./logging.ini", disable_existing_loggers=False)
+logger = logging.getLogger(__name__)
 
 
 def ensure_connection(function):
@@ -10,6 +17,26 @@ def ensure_connection(function):
     return inner
 
 
+def catch_error(function):
+    def inner(*args, **kwargs):
+        try:
+            return function(*args, **kwargs)
+        except sqlite3.DataError as data_error:
+            logger.error(f'Error: {data_error}')
+        except sqlite3.OperationalError as operational_error:
+            logger.error(f'Error: {operational_error}')
+        except sqlite3.IntegrityError as integrity_error:
+            logger.error(f'Error: {integrity_error}')
+        except sqlite3.InternalError as internal_error:
+            logger.error(f'Error: {internal_error}')
+        except sqlite3.ProgrammingError as programming_error:
+            logger.error(f'Error: {programming_error}')
+        except sqlite3.NotSupportedError as not_supported_error:
+            logger.error(f'Error: {not_supported_error}')
+    return inner
+
+
+@catch_error
 @ensure_connection
 def init_db(connection):
     cursor = connection.cursor()
@@ -38,6 +65,7 @@ def init_db(connection):
     connection.commit()
 
 
+@catch_error
 @ensure_connection
 def get_client(unique_code, unique_identifier, connection) -> bool:
     '''
@@ -58,6 +86,7 @@ def get_client(unique_code, unique_identifier, connection) -> bool:
     return False
 
 
+@catch_error
 @ensure_connection
 def add_new_client_to_db(unique_identifier, unique_code, connection):
     '''
@@ -75,6 +104,7 @@ def add_new_client_to_db(unique_identifier, unique_code, connection):
     connection.commit()
 
 
+@catch_error
 def add_new_message(unique_identifier, unique_code, message, connection) -> bool:
     '''
     The method writes the provided text message to a var file if client code is correct
