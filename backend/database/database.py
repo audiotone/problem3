@@ -23,16 +23,22 @@ def catch_error(function):
             return function(*args, **kwargs)
         except sqlite3.DataError as data_error:
             logger.error(f'Error: {data_error}')
+            raise data_error
         except sqlite3.OperationalError as operational_error:
             logger.error(f'Error: {operational_error}')
+            raise operational_error
         except sqlite3.IntegrityError as integrity_error:
             logger.error(f'Error: {integrity_error}')
+            raise integrity_error
         except sqlite3.InternalError as internal_error:
             logger.error(f'Error: {internal_error}')
+            raise internal_error
         except sqlite3.ProgrammingError as programming_error:
             logger.error(f'Error: {programming_error}')
+            raise programming_error
         except sqlite3.NotSupportedError as not_supported_error:
             logger.error(f'Error: {not_supported_error}')
+            raise not_supported_error
     return inner
 
 
