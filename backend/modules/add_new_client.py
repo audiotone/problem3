@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from database.database import add_new_client_to_db
+from database.database import add_new_client_to_db, check_unique_identifier_in_db
 from .check_unique_identifier import check_unique_identifier_type
 from .generate_unique_code import generate_unique_code
 import json
@@ -30,9 +30,12 @@ def add_new_client():
         logger.error(f'Error: {decode_error}')
         return {"status": "error", "message": "json is not valid"}
 
-    if check_unique_identifier_type(unique_identifier):
+    # TODO Is this type checking realy needed?
+    # if check_unique_identifier_type(unique_identifier):
+    if check_unique_identifier_in_db(unique_identifier):
+        return {"status": "error", "message": "this unique identifier already exists"}
+    else:
         unique_code = generate_unique_code()
         add_new_client_to_db(unique_identifier, unique_code)
         return {"status": "200", "unique_code": unique_code}
-    else:
-        return {"status": "error", "message": "unique identifier has not string format"}
+        # return {"status": "error", "message": "unique identifier has not string format"}
