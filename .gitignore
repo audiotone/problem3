@@ -158,3 +158,4 @@ dmypy.json
 
 #PyCharm
 .idea/
+/client/settings.py
