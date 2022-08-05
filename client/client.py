@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QLa
 from server_connector import ServerConnector
 
 # Settings for local or production server's URL: local = True for local, local = False for production
-local = True
+local = False
 
 
 class MainWindow(QWidget):
@@ -44,6 +44,7 @@ class MainWindow(QWidget):
         get_unique_code_button.clicked.connect(self.get_unique_code)
 
         # Add field for writing message
+        # TODO: Add another widget for messages which already send
         self.write_message_field = QPlainTextEdit(self)
         self.layout().addWidget(self.write_message_field)
 
@@ -71,26 +72,35 @@ class MainWindow(QWidget):
         self.showStatus("Generate unique identifier: OK")
         return self.unique_identifier
 
-    def update_unique_identifier_view(self):
-        pass
-
     def get_unique_code(self):
+        # TODO error message handling
         print(f"Get unique code with parameters: {self.unique_identifier}")
-        self.unique_code = connector.get_unique_code(self.unique_identifier)
+        self.unique_code = connector1.get_unique_code(self.unique_identifier)
         self.unique_code_view.setText(self.unique_code)
         print(self.unique_code)
 
     def send_message(self):
-        print("sending message")
+        message=self.write_message_field.toPlainText()
+        print(f"Sending message: {message}")
+
+        status = connector2.send_message(
+            unique_identifier=self.unique_identifier,
+            unique_code=self.unique_code,
+            message=message
+        )
+        self.showStatus(f"Sending message status: {status}")
+
 
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     # TODO: remove hardcode settings
     if local:
-        connector = ServerConnector(settings.URL, settings.PORT, local)
+        connector1 = ServerConnector(settings.URL, settings.PORT, local)
+        connector2 = ServerConnector(settings.URL, settings.PORT, local)
     else:
-        connector = ServerConnector(settings.PROD_URL, settings.PROD_PORT, local)
+        connector1 = ServerConnector(settings.PROD_URL, settings.PROD_PORT_8000, local)
+        connector2 = ServerConnector(settings.PROD_URL, settings.PROD_PORT_8001, local)
     window = MainWindow()
     window.show()
     sys.exit(app.exec())
