@@ -20,7 +20,7 @@ class MainWindow(QWidget):
         self.setLayout(QVBoxLayout())
 
         # Set start's settings
-        self.unique_identifier = 'Default unique identifier'
+        self.unique_identifier = 'Place for unique identifier'
         self.unique_code = 'Place for unique code'
 
         # Add label for unique identifier
@@ -69,26 +69,28 @@ class MainWindow(QWidget):
         self.unique_identifier = str(uuid.uuid4())
         self.unique_identifier_view.setText(self.unique_identifier)
         self.unique_identifier_view.setAlignment(Qt.AlignCenter)
-        self.showStatus("Generate unique identifier: OK")
+        self.showStatus("Status:ok. Unique identifier successfully generated")
         return self.unique_identifier
 
     def get_unique_code(self):
         # TODO error message handling
         print(f"Get unique code with parameters: {self.unique_identifier}")
-        self.unique_code = connector1.get_unique_code(self.unique_identifier)
+        result = connector1.get_unique_code(self.unique_identifier)
+        self.unique_code = result['unique_code']
         self.unique_code_view.setText(self.unique_code)
         print(self.unique_code)
+        self.showStatus(f"Status:{result['status']}. {result['message']}")
 
     def send_message(self):
-        message=self.write_message_field.toPlainText()
+        message = self.write_message_field.toPlainText()
         print(f"Sending message: {message}")
 
-        status = connector2.send_message(
+        result = connector2.send_message(
             unique_identifier=self.unique_identifier,
             unique_code=self.unique_code,
             message=message
         )
-        self.showStatus(f"Sending message status: {status}")
+        self.showStatus(f"Status:{result['status']}. {result['message']}")
 
 
 

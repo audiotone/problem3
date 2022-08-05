@@ -25,17 +25,17 @@ def add_new_client():
     #     return {"status": "error", "message": "no json sent"}
     except KeyError as key_error:
         logger.error(f'Error: {key_error}')
-        return {"status": "error", "message": "key is not correct", "unique_code": None}
+        return {"status": "error", "message": "Key is not correct", "unique_code": None}
     except json.JSONDecodeError as decode_error:
         logger.error(f'Error: {decode_error}')
-        return {"status": "error", "message": "json is not valid", "unique_code": None}
+        return {"status": "error", "message": "Json is not valid", "unique_code": None}
 
     # TODO Is this type checking realy needed?
     # if check_unique_identifier_type(unique_identifier):
     if check_unique_identifier_in_db(unique_identifier):
-        return {"status": "error", "message": "this unique identifier already exists", "unique_code": None}
+        return {"status": "error", "message": "This unique identifier already exists", "unique_code": None}
     else:
         unique_code = generate_unique_code()
         add_new_client_to_db(unique_identifier, unique_code)
-        return {"status": "200", "message": "unique identifier successfully generated", "unique_code": unique_code}
+        return {"status": "ok", "message": "Unique identifier successfully generated", "unique_code": unique_code}
         # return {"status": "error", "message": "unique identifier has not string format"}

@@ -15,17 +15,17 @@ class ServerConnector:
                                    'unique_identifier': unique_identifier
                                }
                                ).json()
-        return result['unique_code'] if result['status'] == "200" else result['message']
+        return result
 
     def send_message(self, unique_identifier, unique_code, message):
         # TODO: Add error handling
         result = requests.post(f"{self.url}",
-                               json = {
+                               json={
                                    'unique_identifier': unique_identifier,
                                    'unique_code': unique_code,
                                    'message': message
                                }
                                ).json()
-        return result['status']
+        return result
 
 

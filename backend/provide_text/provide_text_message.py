@@ -24,12 +24,12 @@ def provide_text_message():
         message = data['message']
         if get_client(unique_code, unique_identifier):
             logger.info(f'Client {unique_identifier} added new message: {message}')
-            return {"status": "ok"}
+            return {"status": "ok", "message": "Message added successfully"}
         else:
-            return {"status": "error", "message": "client code does not match client identifier"}
+            return {"status": "error", "message": "Client code does not match client identifier"}
     except KeyError as key_error:
         error_logger.error(f'Error: {key_error} This key is not correct')
-        return {"status": "error", "message": "key is not correct"}
+        return {"status": "error", "message": "Key is not correct"}
     except json.JSONDecodeError as decode_error:
         error_logger.error(f'Error: {decode_error}')
         return {"status": "error", "message": "json is not valid"}
