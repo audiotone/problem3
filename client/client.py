@@ -73,7 +73,7 @@ class MainWindow(QWidget):
         return self.unique_identifier
 
     def get_unique_code(self):
-        # TODO error message handling
+        # TODO error message handling. For example: app crashed when backend not work
         print(f"Get unique code with parameters: {self.unique_identifier}")
         result = connector1.get_unique_code(self.unique_identifier)
         self.unique_code = result['unique_code']

@@ -7,15 +7,23 @@ class ServerConnector:
         self.url = address if local else f"{address}:{port}"
         print(f"Init ServerConnector with url: {self.url}")
 
-
     def get_unique_code(self, unique_identifier):
         # TODO add error handling
-        result = requests.post(f"{self.url}",
-                               json={
-                                   'unique_identifier': unique_identifier
-                               }
-                               ).json()
-        return result
+        try:
+            result = requests.post(f"{self.url}",
+                                   json={
+                                       'unique_identifier': unique_identifier
+                                   }
+                                   ).json()
+            return result
+        except requests.ConnectionError:
+            result = {
+                "status": "error",
+                "message": "Couldn't connect to server",
+                "unique_code": ""
+            }
+
+            return result
 
     def send_message(self, unique_identifier, unique_code, message):
         # TODO: Add error handling
@@ -27,5 +35,3 @@ class ServerConnector:
                                }
                                ).json()
         return result
-
-
