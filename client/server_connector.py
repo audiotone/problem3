@@ -25,7 +25,6 @@ class ServerConnector:
             return result
 
     def send_message(self, unique_identifier, unique_code, message):
-        # TODO: Add error handling
         try:
             result = requests.post(f"{self.url}",
                                    json={
