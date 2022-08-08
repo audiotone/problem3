@@ -8,7 +8,6 @@ class ServerConnector:
         print(f"Init ServerConnector with url: {self.url}")
 
     def get_unique_code(self, unique_identifier):
-        # TODO add error handling
         try:
             result = requests.post(f"{self.url}",
                                    json={
@@ -27,11 +26,18 @@ class ServerConnector:
 
     def send_message(self, unique_identifier, unique_code, message):
         # TODO: Add error handling
-        result = requests.post(f"{self.url}",
-                               json={
-                                   'unique_identifier': unique_identifier,
-                                   'unique_code': unique_code,
-                                   'message': message
-                               }
-                               ).json()
-        return result
+        try:
+            result = requests.post(f"{self.url}",
+                                   json={
+                                       'unique_identifier': unique_identifier,
+                                       'unique_code': unique_code,
+                                       'message': message
+                                   }
+                                   ).json()
+            return result
+        except requests.ConnectionError:
+            result = {
+                "status": "error",
+                "message": "Couldn't connect to server"
+            }
+            return result
